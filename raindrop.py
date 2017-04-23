@@ -2,8 +2,14 @@ import os
 
 from gi.repository import Gtk
 from scenes.user_management import LoginView, RegisterView
+from pymongo import MongoClient
 
 build_file = gtk_builder_file = os.path.splitext(__file__)[0] + '.ui'
+
+STORAGE_URL = "https://raindrop-3c2ba.firebaseio.com"
+
+MONGO_CLIENT = MongoClient('localhost', 27017)
+DATABASE = MONGO_CLIENT['raindrop']
 
 class Application(object):
     def __init__(self):
@@ -27,9 +33,8 @@ class Application(object):
         self.button_login.connect('clicked', self.signal_window_login)
         self.button_register.connect('clicked', self.signal_window_register)
 
-        
-        self.window.show()
-
+        self.window.show()        
+    
     def signal_window_destroy(self, _):
         self.window.destroy()
         Gtk.main_quit()
@@ -42,7 +47,7 @@ class Application(object):
                             True,
                             10
                         )
-        LoginView(self.scene_start, self.stage, self.builder)
+        LoginView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
         
                     
 
@@ -54,7 +59,7 @@ class Application(object):
                             True,
                             10
                         )
-        RegisterView(self.scene_start, self.stage, self.builder)
+        RegisterView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
 if __name__ == '__main__':
     Application()
     Gtk.main()

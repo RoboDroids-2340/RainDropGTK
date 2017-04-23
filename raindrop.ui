@@ -233,7 +233,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="padding">10</property>
+        <property name="padding">5</property>
         <property name="position">2</property>
       </packing>
     </child>
@@ -394,7 +394,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="register_label_description1">
+      <object class="GtkLabel" id="register_label_description">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Please Register</property>
@@ -494,7 +494,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="register_password_field1">
+          <object class="GtkEntry" id="register_password_field">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
@@ -530,7 +530,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="regter_user_field">
+          <object class="GtkEntry" id="register_user_field">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
