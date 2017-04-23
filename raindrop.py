@@ -25,7 +25,9 @@ class Application(object):
                             10
                         )
         
-        
+        self.login_view = None
+        self.register_view = None
+
         self.button_login = self.builder.get_object('main_login')
         self.button_register = self.builder.get_object('main_register')
 
@@ -47,7 +49,9 @@ class Application(object):
                             True,
                             10
                         )
-        LoginView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
+        
+        if not self.login_view:
+            self.login_view = LoginView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
         
                     
 
@@ -59,7 +63,9 @@ class Application(object):
                             True,
                             10
                         )
-        RegisterView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
+        if not self.register_view:
+            self.register_view = RegisterView(self.scene_start, self.stage, self.builder, DATABASE, self.window)
+
 if __name__ == '__main__':
     Application()
     Gtk.main()

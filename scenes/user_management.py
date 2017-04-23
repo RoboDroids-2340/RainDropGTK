@@ -1,3 +1,5 @@
+from scenes.main import MainView
+from scenes.managers import User, Registration, LoginManager
 from gi.repository import Gtk
 
 class LoginView(object):
@@ -7,7 +9,7 @@ class LoginView(object):
         self.stage = stage
         self.db = db
         self.window = window
-
+        self.main_view = None
         self.setup()
 
     def setup(self):
@@ -41,7 +43,10 @@ class LoginView(object):
                                 True,
                                 0
                         )
-
+        if not self.main_view:
+            self.main_view = MainView(self.scene, self.stage, self.builder, user, self.db, self.window)
+        else:
+            self.main_view.user = user
     def signal_button_cancel(self, _):
         self.stage.remove(self.scene)
         self.stage.pack_end(self.prev,
@@ -50,43 +55,6 @@ class LoginView(object):
                                 0
                         )
 
-class User(object):
-    def __init__(self, name=None, id=None, password=None, user_type=None):
-        self.json = {}
-        if name != None:
-            self.json['name'] = name
-        if id != None:
-            self.json['id'] = id
-        if password != None:
-            self.json['password'] = password
-        if user_type != None:
-            self.json['type'] = user_type
-    def add(self, name, data):
-        self.json[name] = data
-    
-class LoginManager(object):
-    def __init__(self, username, password, db):
-        self.db = db
-        self.valid = self.check_account(User(id=username, password=password))
-
-    def check_account(self, user):
-        out = self.db.raindrop.find_one(user.json) 
-        if out == None:
-            return (False, user)
-        else:
-            user.add('type', out['type'])
-            user.add('name', out['name'])
-            return (True, user)
-
-class Registration(object):
-    def __init__(self, username, password, user_type, name, db):
-        self.db = db
-        if user_type not in ["User", "Administrator", "Moderator"]:
-            self.valid = False
-        else:
-            user = User(name=name, id=username, user_type=user_type, password=password)
-            self.db.raindrop.insert_one(user.json)
-            self.valid = True
 
 class RegisterView(object):
     def __init__(self, prev, stage, builder, db, window):
@@ -141,4 +109,4 @@ class RegisterView(object):
                                 True,
                                 True,
                                 0
-                        )
+                        )      
