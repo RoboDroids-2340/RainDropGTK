@@ -2,6 +2,8 @@ import requests
 import json
 import datetime
 
+from scenes.graph import HistoricalGraph
+
 class User(object):
     def __init__(self, name=None, id=None, password=None, user_type=None):
         self.json = {}
@@ -115,3 +117,24 @@ class QualityReport(object):
 
     def add(self, field, data):
         self.json[field] = data
+
+class GraphManager(object):
+    def __init__(self, year, _type, db):
+        dump = db.quality_reports.find({})
+        req = 'virus_ppm' if _type == 'v' else 'contaminant_ppm'
+        num_reports = [0,0,0,0,0,0,0,0,0,0,0,0]
+        report_total = [0,0,0,0,0,0,0,0,0,0,0,0]
+        for obj in dump:
+            to_parse = obj['ts'].split('-')
+            if to_parse[0] == year:
+                month = int(to_parse[1]) - 1
+                num_reports[month] = num_reports[month] + 1
+                report_total[month] = report_total[month] + float(obj[req])
+        final = []
+        for i in range(12):
+            if num_reports[i] != 0:
+                final.append(float(report_total[i] * 1.0 / num_reports[i]))
+            else:
+                final.append(0.0)
+        HistoricalGraph(final, _type, year)
+                 

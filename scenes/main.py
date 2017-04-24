@@ -1,6 +1,6 @@
 import datetime
 
-from scenes.managers import User, UserUpdate, ReportManager, Report, QualityReport, QualityReportManager
+from scenes.managers import User, UserUpdate, ReportManager, Report, QualityReport, QualityReportManager, GraphManager
 
 from gi.repository import Gtk
 
@@ -19,6 +19,7 @@ class MainView(object):
         self.view_report_view = None
         self.create_quality_view = None
         self.view_quality_view = None
+        self.graph_view = None
 
     def setup(self):
         self.scene = self.builder.get_object('scene_main')
@@ -38,8 +39,23 @@ class MainView(object):
         self.button_view_quality_reports = self.builder.get_object('menu_button_view_quality_reports')
         self.button_view_quality_reports.connect('clicked', self.signal_button_view_quality_reports)
 
+        self.button_graph = self.builder.get_object('menu_button_graph')
+        self.button_graph.connect('clicked', self.signal_button_graph)
+
         self.button_logout = self.builder.get_object('menu_button_logout')
         logout_handler = self.button_logout.connect('clicked', self.signal_button_logout)
+
+    def signal_button_graph(self, _):
+        self.stage.remove(self.scene)
+        self.new = self.builder.get_object('scene_graph')
+        
+        self.stage.pack_end(self.new,
+                                True,
+                                True,
+                                0
+                        )
+        if not self.graph_view:
+            self.graph_view = GraphView(self.scene, self.stage, self.builder, self.user, self.db, self.window)
 
     def signal_button_view_quality_reports(self, _):
         self.stage.remove(self.scene)
@@ -343,6 +359,46 @@ class QualityReportView(object):
             user = update['user']
             self.tv_model.append([_id, loc, virus, cont, time, qual, user])
             counter += 1
+
+    def signal_button_done(self, _):
+        self.exit()
+
+    def exit(self):
+        self.stage.remove(self.scene)
+        self.stage.pack_end(self.prev,
+                                True,
+                                True,
+                                0
+                        ) 
+
+class GraphView(object):
+    def __init__(self, prev, stage, builder, user, db, window):
+        self.prev = prev
+        self.stage = stage
+        self.builder = builder
+        self.user  = user
+        self.db = db
+        self.window = window
+
+        self.setup()
+
+    def setup(self):
+        self.scene = self.builder.get_object('scene_graph')
+
+        self.button_generate = self.builder.get_object('graph_generate_button')
+        self.button_generate.connect('clicked', self.signal_graph_generate)
+
+
+        self.button_done = self.builder.get_object('graph_done_button')
+        self.button_done.connect('clicked', self.signal_button_done)
+
+        self.ppm = self.builder.get_object('graph_ppm_field')
+        self.year = self.builder.get_object('graph_year_field')
+
+    def signal_graph_generate(self, _):
+        if (self.ppm.get_text() and self.year.get_text()):
+            _type = 'v' if self.ppm.get_text() == 'virus' else 'c'
+            GraphManager(self.year.get_text(), _type, self.db)
 
     def signal_button_done(self, _):
         self.exit()
