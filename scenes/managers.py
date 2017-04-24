@@ -48,7 +48,8 @@ class UserUpdate(object):
             self.new.add(field, updates.json[field])
 
 class ReportManager(object):
-    def __init__(self, report, db):
+
+    def __init__(self, report=None, db=None):
         self.report = report
         self.db = db
 
@@ -60,9 +61,15 @@ class ReportManager(object):
         lon = j['longitude']
         self.report.add('lat', lat)
         self.report.add('lon', lon)
-        self.report.add('ts', datetime.datetime.now().toordinal())
+        self.report.add('ts', str(datetime.datetime.now()))
 
         self.db.water_reports.insert_one(self.report.json)
+
+    def get_all(self):
+        toRet = []
+        for found in self.db.water_reports.find({}):
+            toRet.append(found)
+        return toRet
 
 class Report(object):
     def __init__(self, water_type, water_quality, user):

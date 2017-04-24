@@ -413,11 +413,10 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="relief">none</property>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">True</property>
+        <property name="fill">False</property>
         <property name="padding">5</property>
         <property name="position">4</property>
       </packing>
@@ -629,7 +628,7 @@
     </child>
     <child>
       <object class="GtkButton" id="menu_button_create_reports">
-        <property name="label" translatable="yes">View Water Reports</property>
+        <property name="label" translatable="yes">Create Water Report</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -639,6 +638,20 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="menu_button_view_reports">
+        <property name="label" translatable="yes">View Water Reports</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">25</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -653,7 +666,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>
@@ -925,6 +938,68 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="position">4</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkBox" id="scene_view">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel" id="view_label_title1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Water Quality Reports</property>
+        <property name="ellipsize">end</property>
+        <attributes>
+          <attribute name="font-desc" value="Abyssinica SIL Bold 10"/>
+          <attribute name="size" value="20000"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="view_label_description">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Here is the list of water quality reports in our database!</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTreeView" id="report_tv">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeview-selection1"/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="view_button_done">
+        <property name="label" translatable="yes">Done</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="padding">5</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>
