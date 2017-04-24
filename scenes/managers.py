@@ -1,3 +1,7 @@
+import requests
+import json
+import datetime
+
 class User(object):
     def __init__(self, name=None, id=None, password=None, user_type=None):
         self.json = {}
@@ -42,3 +46,30 @@ class UserUpdate(object):
         self.new = user
         for field in updates.json:
             self.new.add(field, updates.json[field])
+
+class ReportManager(object):
+    def __init__(self, report, db):
+        self.report = report
+        self.db = db
+
+    def create(self):
+        loc = send_url = 'http://freegeoip.net/json'
+        r = requests.get(send_url)
+        j = json.loads(r.text)
+        lat = j['latitude']
+        lon = j['longitude']
+        self.report.add('lat', lat)
+        self.report.add('lon', lon)
+        self.report.add('ts', datetime.datetime.now().toordinal())
+
+        self.db.water_reports.insert_one(self.report.json)
+
+class Report(object):
+    def __init__(self, water_type, water_quality, user):
+        self.json = {}
+        self.json['type'] = water_type
+        self.json['quality'] = water_quality
+        self.json['name'] = user
+
+    def add(self, field, data):
+        self.json[field] = data
