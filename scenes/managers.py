@@ -80,3 +80,38 @@ class Report(object):
 
     def add(self, field, data):
         self.json[field] = data
+
+class QualityReportManager(object):
+
+    def __init__(self, report=None, db=None):
+        self.report = report
+        self.db = db
+
+    def create(self):
+        loc = send_url = 'http://freegeoip.net/json'
+        r = requests.get(send_url)
+        j = json.loads(r.text)
+        lat = j['latitude']
+        lon = j['longitude']
+        self.report.add('lat', lat)
+        self.report.add('lon', lon)
+        self.report.add('ts', str(datetime.datetime.now()))
+
+        self.db.quality_reports.insert_one(self.report.json)
+
+    def get_all(self):
+        toRet = []
+        for found in self.db.quality_reports.find({}):
+            toRet.append(found)
+        return toRet
+        
+class QualityReport(object):
+    def __init__(self, virus_ppm, contaminant_ppm, quality, user):
+        self.json = {}
+        self.json['virus_ppm'] = virus_ppm
+        self.json['contaminant_ppm'] = contaminant_ppm
+        self.json['quality'] = quality
+        self.json['user'] = user
+
+    def add(self, field, data):
+        self.json[field] = data
