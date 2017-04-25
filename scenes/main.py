@@ -46,6 +46,14 @@ class MainView(object):
         logout_handler = self.button_logout.connect('clicked', self.signal_button_logout)
 
     def signal_button_graph(self, _):
+        if self.user.json['type'] not in ['Administrator', 'Moderator']:
+            dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.WARNING,
+                Gtk.ButtonsType.OK, "Sorry")
+            dialog.format_secondary_text(
+                "You do not have the correct permissions for this!")
+            dialog.run()
+            dialog.destroy()
+            return
         self.stage.remove(self.scene)
         self.new = self.builder.get_object('scene_graph')
         
@@ -71,6 +79,14 @@ class MainView(object):
         self.view_quality_view.update()
 
     def signal_button_create_quality_report(self, _):
+        if self.user.json['type'] not in ['Administrator', 'Moderator']:
+            dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.WARNING,
+                Gtk.ButtonsType.OK, "Sorry")
+            dialog.format_secondary_text(
+                "You do not have the correct permissions for this!")
+            dialog.run()
+            dialog.destroy()
+            return
         self.stage.remove(self.scene)
         self.new = self.builder.get_object('scene_create_quality_report')
         self.stage.pack_end(self.new,
